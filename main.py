@@ -1,6 +1,7 @@
 # Import necessary libraries
 
 import os
+import csv
 
 
 def create_folder(path, name1, name2 = None):
@@ -26,26 +27,32 @@ def create_folder(path, name1, name2 = None):
 
 def main():
     path = "C:\\Users\\Jose Garcia\\Desktop\\Total"     # The path for the cities folders to be made
-    cities = []                                     # The list for the cities names
-    addresses = []                                  # The list for the address folders already created
+    cities = []                                         # The list for the cities names
+    addresses = []                                      # The list for the address folders already created
+
 
     with open("Competitor_Drawing_Sorted.csv") as file:     
-        fl = file.readlines()
-        fl.pop(0)
+        fl = csv.reader(file)
+
+    
         for line in fl:
-            # For every lin in the list of the file it creates a list of the strings and saves that to the lines spot
-            fl[fl.index(line)] = line.split(',')
+            if line[1] not in cities and line[1] != '': # Appends all of the cities to the cities list only once
+                cities.append(line[1])
 
 
+        unique_cities = set(cities)
+        for city in unique_cities:
+            city.strip()
+            create_folder(path, city)
+        
 
-    for line in fl: # For all the lists in the list if that city isnt added it adds it to the list of cities
-        if line[3] not in cities:
-            cities.append(line[3])
-
-
-    for i in range(5):
-        create_folder(path, cities[i])
-
+        """ for line in fl:
+            for city in cities:
+                if line[0] not in addresses and city == line[1] and line[0] != '':
+                    create_folder(path, city.strip(), line[0].strip())
+            
+            addresses.append(line[0]) """
+        
     return
 
 
